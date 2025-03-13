@@ -1,0 +1,15 @@
+tests:
+  - name: Basic Alias
+    command: "alias toto=\"echo 12\";toto"
+    status: 0
+    output: "12"
+
+  - name: Basic Wrong Alias
+    command: "alias toto"
+    status: 1
+    output: ""
+
+  - name: Double Alias
+    command: "alias toto=\"echo 12\"; alias toto=\"echo 13\"; toto"
+    status: 0
+    output: "13"

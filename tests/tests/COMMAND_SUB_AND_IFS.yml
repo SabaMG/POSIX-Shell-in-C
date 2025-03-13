@@ -1,0 +1,85 @@
+tests:
+  - name: Simple Sub 
+    command: "# Using backticks\\ncurrent_date=`date`\\n\\n# Using $()\\ncurrent_date=$(date)"
+    status: 0
+    output: ""
+
+  - name: Double Sub
+    command: "# Using backticks\\nif [ `uname` = \"Linux\" ]; then\\necho \"This is a Linux system.\"\\nfi\\n\\n# Using $()\\nif [ $(uname) = \"Linux\" ]; then\\n  echo \"This is a Linux system.\"\\nfi"
+    status: 0
+    output: ""
+
+  - name: Long Sub 
+    command: "for file in `ls`; do echo $file ;done"
+    status: 0
+    output: "cland-tidy.py\nMakefile\nMakefile.am\nMakefile.in\nscripts\ntemp\ntest.py\ntests"
+
+  - name: Commented Sub 
+    command: "echo 1;\n#echo `ls`"
+    status: 0
+    output: "1"
+
+  - name: Double Quoted Sub 
+    command: "echo 1 \"echo `ls`\""
+    status: 0
+    output: "1 echo cland-tidy.py\nMakefile\nMakefile.am\nMakefile.in\nscripts\ntemp\ntest.py\ntests"
+
+  - name: Fake Quoted Sub 
+    command: "echo 1 \\\"echo `ls`\\\""
+    status: 0
+    output: "1 \"echo cland-tidy.py Makefile Makefile.am Makefile.in scripts temp test.py tests\""
+
+  - name: Sub In Sub 
+    command: "echo $(ls `find test.py`)"
+    status: 0
+    output: "test.py"
+
+  - name: IFS For Loop and Echo
+    command: "IFS=\",\"; for i in $IFS\"1,2,3\"; do echo $i; done"
+    status: 0
+    output: "\n1 2 3"
+
+  - name: Empty Sub With echo
+    command: "echo backquote`/bin/echo `echo s``"
+    status: 0
+    output: "backquoteecho s"
+
+  - name: Empty Sub 1
+    command: "``"
+    status: 0
+    output: ""
+
+  - name: Empty Sub 2
+    command: "$()"
+    status: 0
+    output: ""
+
+  - name: Empty Sub Escaped 1
+    command: "`\\\\`"
+    status: 127
+    output: ""
+
+  - name: Empty Sub Escaped 2
+    command: "$(\\\\)"
+    status: 127
+    output: ""
+
+  - name: Variable in sub
+    command: "toto=ls; $(echo $toto)"
+    status: 0
+    output: "cland-tidy.py\nMakefile\nMakefile.am\nMakefile.in\nscripts\ntemp\ntest.py\ntests"
+
+  - name: Path Sub
+    command: "echo $(dirname `which ls`)"
+    status: 0
+    output: "/usr/bin"
+
+  - name: Sub in Echo
+    command: "echo \"Today is $(date +%A), in the year $(date +%Y).\""
+    status: 0
+    output: "Today is Saturday, in the year 2024."
+
+  - name: Inline Sub
+    command: "echo \"Files in current directory: $(ls | wc -l)\""
+    status: 0
+    output: "Files in current directory: 8"

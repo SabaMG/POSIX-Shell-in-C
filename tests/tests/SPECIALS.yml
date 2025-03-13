@@ -1,0 +1,65 @@
+tests:
+  - name: If Quoted
+    command: "echo 12 \"if\" #13;"
+    status: 0
+    output: "12 if"
+
+  - name: Comment
+    command: "#13"
+    status: 0
+    output: ""
+
+  - name: First If Quoted
+    command: "\"if\" echo 12"
+    status: 127
+    output: ""
+
+  - name: Missing Closing Doubles Quotes
+    command: "echo \"12"
+    status: 2
+    output: ""
+
+  - name: Missing Closing Single Quotes
+    command: "echo '12"
+    status: 2
+    output: ""
+
+  - name: Quoted Side To Word
+    command: "echo 12\"if\";"
+    status: 0
+    output: "12if"
+
+  - name: Word Side to Quoted
+    command: "echo \"if\"12;"
+    status: 0
+    output: "if12"
+
+  - name: Quoted Side To Quoted
+    command: "echo \"if\"\"12\";"
+    status: 0
+    output: "if12"
+
+  - name: Quoted Assignment Side To Quoted
+    command: "echo \"to=\"\"12\";"
+    status: 0
+    output: "to=12"
+
+  - name: Assignment Side To Quoted
+    command: "to=\"echo 12\"; echo $to"
+    status: 0
+    output: "echo 12"
+
+  - name: Assignment in Quoted Side To Assignment
+    command: "ti=1; to=\"echo \"$ti\"s2\"; echo $to"
+    status: 0
+    output: "echo 1s2"
+
+  - name: Assign An Assignment
+    command: "ti=1; to=$ti; echo $to"
+    status: 0
+    output: "1"
+
+  - name: Escape Newline
+    command: "echo \\\nHello"
+    status: 0
+    output: "Hello"

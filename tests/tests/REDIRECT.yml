@@ -1,0 +1,75 @@
+tests:
+  - name: Simple Right Redir
+    command: "echo 12 > tests.txt; rm -f tests.txt"
+    status: 0
+    output: ""
+
+  - name: Double Right Redir
+    command: "echo 12 > tests.txt > a.txt; echo \" a file\" >> a.txt; cat a.txt; rm -f tests.txt; rm -f a.txt"
+    status: 0
+    output: "12 a file"
+
+  - name: Simple rm
+    command: "echo 12 > a.txt; rm -f a.txt"
+    status: 0
+    output: ""
+
+  - name: Simple Greater
+    command: "rm -f temp1; echo 12 > temp1; cat temp1; rm -f temp1"
+    status: 0
+    output: "12"
+
+  - name: Simple Greater Io Number
+    command: "rm -f temp1; echo 12 3> temp1; cat temp1; rm -f temp1"
+    status: 0
+    output: "12"
+
+  - name: End Greater
+    command: "rm -f temp1; > temp1 echo 12; cat temp1; rm -f temp1"
+    status: 0
+    output: "12"
+
+  - name: Multiple Word Greater
+    command: "rm -f temp1; echo 11 > temp1 echo 12 ls; cat temp1; rm -f temp1"
+    status: 0
+    output: "11 echo 12 ls"
+
+  - name: Multiple Greater
+    command: "rm -f temp1; rm -f temp2; echo 12 > temp1 > temp2; cat temp1; cat temp2; rm -f temp1; rm -f temp2"
+    status: 0
+    output: "12"
+
+  - name: Simple Less
+    command: "rm -f temp1; echo \"Hello World\" > temp1; cat < temp1; rm -f temp1"
+    status: 0
+    output: "Hello World"
+
+  - name: Double Greater
+    command: "rm -f temp1; echo \"Hello\" > temp1; echo \"World\" >> temp1; cat temp1; rm -f temp1"
+    status: 0
+    output: "Hello\nWorld"
+
+  - name: Less And
+    command: "rm -f temp1; echo \"Hello World\" > temp1; exec 3< temp1; cat <&3; rm -f temp1"
+    status: 0
+    output: "Hello World"
+
+  - name: Clobber
+    command: "set -o noclobber; rm -f temp1; echo \"Hello World\" >| temp1; cat temp1; rm -f temp1"
+    status: 0
+    output: "Hello World"
+
+  - name: Diamond
+    command: "rm -f temp1; echo \"Hello World\" > temp1; exec 3<> temp1; read line <&3; echo \"New Line\" >&3; exec 3>&-; cat temp1; rm -f temp1; rm -f -"
+    status: 0
+    output: "Hello World\nNew Line"
+
+  - name: Complex Less IFS
+    command: "echo -e \"First\nSecond\" > temp1; while IFS= read -r line; do echo \"Line: $line\"; done < temp1; rm -f temp1"
+    status: 0
+    output: "Line: First\nLine: Second"
+
+  - name: Complex Double Greater For
+    command: "rm -f temp1; for i in 1 2; do echo \"Line $i\" >> temp1; done; cat temp1; rm -f temp1"
+    status: 0
+    output: "\"Line 1\"\n\"Line 2\""

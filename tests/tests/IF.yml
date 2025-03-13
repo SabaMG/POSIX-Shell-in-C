@@ -1,0 +1,86 @@
+tests:
+  - name: Simple If
+    command: "if echo 12; then echo 13; else echo 14; fi"
+    status: 0
+    output: "12\n13"
+
+  - name: Simple Elif
+    command: "if echo 12; then echo 13; elif true;false then ls; else echo 14; fi"
+    status: 2
+    output: ""
+
+  - name: Embedded If 1
+    command: "if if echo 12; then echo 14 fi; fi then if ls temp; then echo toto; else echo toto ; fi else echo 35 fi; fi"
+    status: 0
+    output: "12\n14 fi\ntest\ntoto"
+  
+  - name: Embedded If 2
+    command: "if if if echo 1; then echo 2;fi;false; then echo false;fi;then echo 3;fi"
+    status: 0
+    output: "1\n2\n3\n"
+  
+  - name: Boolean If
+    command: "if true; then echo 'Alpha'; else echo 'Beta'; fi"
+    status: 0
+    output: "Alpha"
+
+  - name: Embedded Boolean If
+    command: "if true; then if true; then echo 'Middle'; else echo 'End'; fi; else echo 'Finish'; fi"
+    status: 0
+    output: "Middle"
+
+  - name: Embedded IF with builtin
+    command: "echo 'First'; if echo 'Second'; then if false; then echo 'Third'; fi; echo 'Fourth'; fi"
+    status: 0
+    output: "First\nSecond\nFourth"
+
+  - name: IF Multiple Condition
+    command: "if true;false;true; then echo true; fi"
+    status: 0
+    output: "true"
+
+  - name: Rejected Missing Then 1
+    command: "if echo 12; then else echo 14; fi"
+    status: 2
+    output: ""
+
+  - name: Rejected Missing Then 2
+    command: "if true; else false fi"
+    status: 2
+    output: ""
+
+  - name: Rejected Elif
+    command: "if echo 12; then echo 13; elif true;false then ls; fi"
+    status: 2
+    output: ""
+
+  - name: Rejected Missing If
+    command: "then echo 13 else echo 14"
+    status: 2
+    output: ""
+
+  - name: Rejected Only Else
+    command: "else echo 14"
+    status: 2
+    output: ""
+
+  - name: Rejected Missing Condition
+    command: "if; then echo 12; else echo 14; fi"
+    status: 2
+    output: ""
+
+  - name: Rejected Bad If
+    command: "if true;false;true then echo true; fi"
+    status: 2
+    output: ""
+
+  - name: Rejected If Commented
+    command: "\"if\" \"echo\" 12"
+    status: 127
+    output: ""
+
+  - name: Boolean Full Path
+    command: "if /bin/false ; then echo 13; elif /bin/true; then /bin/true; else echo wrong; fi"
+    status: 0
+    output: ""
+

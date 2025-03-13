@@ -1,0 +1,40 @@
+tests:
+  - name: Simple Pipe
+    command: "echo 13 | cat -e"
+    status: 0
+    output: "13$"
+
+  - name: Multiple Pipe
+    command: "echo 13 | echo 14 | cat"
+    status: 0
+    output: "14"
+
+  - name: Missing Pipe
+    command: "echo 13 | "
+    status: 2
+    output: ""
+
+  - name: Pipe Unknown Command
+    command: "echo 13 | tes"
+    status: 127
+    output: ""
+
+  - name: Hard Pipe
+    command: "toto=true; while $toto; do toto=false; done | if false; then false; else false; fi | echo 11 | false | echo $toto;"
+    status: 0
+    output: "true"
+
+  - name: Complex Shell Command with Redirection and Subshell
+    command: "(for i in 1 2 3; do echo \"Item $i\"; done) | grep \"2\" > filtered_items.txt; cat filtered_items.txt; rm -f filtered_items.txt"
+    status: 0
+    output: "Item 2"
+
+  - name: Complex Pipeline with Text Processing
+    command: "echo -e \"apple\nbanana\ncherry\" | grep \"a\" | tr \"[:lower:]\" \"[:upper:]\" > fruits.txt; cat fruits.txt; rm -f fruits.txt"
+    status: 0
+    output: "APPLE\nBANANA"
+
+  - name: Pipeline with Conditional Execution
+    command: "echo \"This is a test\" | grep \"test\" && echo \"Test found\" || echo \"Test not found\""
+    status: 0
+    output: "This is a test\nTest found"

@@ -1,0 +1,35 @@
+tests:
+  - name: Simple Not
+    command: "if ! false; then echo a; else echo b; fi"
+    status: 0
+    output: "a"
+
+  - name: Builtins & If
+    command: "echo 12; if true;false;true;then echo true; fi"
+    status: 0
+    output: "12\ntrue"
+
+  - name: And & Pipe
+    command: "echo 12 && echo 14 | cat"
+    status: 0
+    output: "12\n14"
+
+  - name: Hard Pipe & And_Or
+    command: "echo 14 && echo 13 | cat || echo toto && echo temp"
+    status: 0
+    output: "14\n13"
+
+  - name: Pipe in If
+    command: "echo 12 | if echo 14 | cat; then echo toto; else echo toto | cat | cat | cat; fi | cat"
+    status: 0
+    output: "14\ntoto"
+
+  - name: Pipe in If
+    command: "echo 12 | if echo 14 | cat && true || false && false; then echo toto; else echo toto | cat | cat | cat; fi | cat"
+    status: 0
+    output: "14\ntoto"
+
+  - name: simple Dot
+    command: ". scripts/dot.sh"
+    status: 0
+    output: "12"

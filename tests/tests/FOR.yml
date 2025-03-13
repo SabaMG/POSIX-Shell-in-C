@@ -1,0 +1,77 @@
+tests:
+  - name: Simple For
+    command: "for i in echo 12; do echo $i; done"
+    status: 0
+    output: "echo\n12"
+
+  - name: For Missing Parts 1
+    command: "for i echo 12; do echo $i; done"
+    status: 2
+    output: ""
+
+  - name: For Missing Parts 2
+    command: "for i in echo 12 do echo $i; done"
+    status: 2
+    output: ""
+
+  - name: For Missing Parts 3
+    command: "for i echo 12;  echo $i; done"
+    status: 2
+    output: ""
+
+  - name: For Missing Parts 4
+    command: "for i echo 12; do echo $i;"
+    status: 2
+    output: ""
+      
+  - name: Complicated For
+    command: "for i in 1 2 3; do echo $i; for j in 4 5; do echo $j; done; done"
+    status: 0
+    output: "1\n4\n5\n2\n4\n5\n3\n4\n5"
+
+  - name: Quoted Keyword 1
+    command: "for i in echo 12; \"do\" echo $i; done"
+    status: 2
+    output: ""
+
+  - name: Quoted Keyword 2
+    command: "for i \"in\" echo 12; 'do' echo $i; done"
+    status: 2
+    output: ""
+
+  - name: Quoted Keyword 3
+    command: "\"for\" i in echo 12;"
+    status: 127
+    output: ""
+
+  - name: Variables For
+    command: "toto=\"echo 12\"; for i in $toto; do echo $i; done"
+    status: 0
+    output: "echo\n12"
+
+  - name: Empty For
+    command: "for i in; do echo $i; done"
+    status: 0
+    output: ""
+
+  - name: Modified Variable For
+    command: "toto=\"echo 12\"; for i in $toto; do toto=\"echo 13\"; echo $i; done"
+    status: 0
+    output: "echo\n12"
+
+  - name: For Space Arg
+    command: "for i in \"   \"; do echo $i; done"
+    status: 0
+    output: "   "
+
+  - name: Nested Loops For Generating Combinations
+    command: "for i in a b; do for j in 1 2; do echo \"$i$j\"; done; done"
+    status: 0
+    output: "a1\na2\nb1\nb2"
+
+  - name: Simple For Expand
+    command: "for i in 1 2 3; do echo \"Item $i\"; done"
+    status: 0
+    output: "Item 1\nItem 2\nItem 3\n"
+
+

@@ -1,0 +1,31 @@
+tests:
+  - name: Simple Echo
+    command: "echo 13n"
+    status: 0
+    output: "13n"
+
+  - name: Multiple Echo 1
+    command: "echo 13\\n; echo 14"
+    status: 0
+    output: "13n\n14"
+
+  - name: Multiple Echo 2
+    script: "tricky_echo.sh"
+    status: 127
+    output: "13\\necho 14"
+
+  - name: Multiple Echo 3
+    command: "echo 13\n\n\n\n\n\necho 14;\necho 13 ;; ls\n\necho 14"
+    status: 2
+    output: ""
+
+  - name: Pipe in If
+    command: "if echo 12; true; then | cat; else echo 14; fi"
+    status: 2
+    output: ""
+
+  - name: too much args (test don't work)
+    command: "echo Hello"
+    script: "funny_escaped.sh"
+    status: 2
+    output: ""

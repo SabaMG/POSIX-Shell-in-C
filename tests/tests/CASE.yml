@@ -1,0 +1,60 @@
+tests:
+  - name: Match Literal String
+    command: "a=\"hello\"; case $a in hello) echo matched;; *) echo no match;; esac"
+    status: 0
+    output: "matched"
+
+  - name: Match Wildcard Pattern
+    command: "a=\"hello\"; case $a in h*) echo starts with h;; *) echo no match;; esac"
+    status: 0
+    output: "starts with h"
+
+  - name: Multiple Patterns
+    command: "a=\"bye\"; case $a in hello|bye) echo greeting or farewell;; *) echo unknown;; esac"
+    status: 0
+    output: "greeting or farewell"
+
+  - name: No Match
+    command: "a=\"unknown\"; case $a in hello) echo hello;; bye) echo bye;; *) echo no match;; esac"
+    status: 0
+    output: "no match"
+
+  - name: Case Fallthrough
+    command: "a=\"fall\"; case $a in fall|through) echo fallthrough;; *) echo no match;; esac"
+    status: 0
+    output: "fallthrough"
+
+  - name: Numeric Pattern
+    command: "a=1; case $a in 1) echo one;; 2) echo two;; *) echo other;; esac"
+    status: 0
+    output: "one"
+
+  - name: Regex Pattern Match
+    command: "a=\"file123.txt\"; case $a in *[0-9].txt) echo matches pattern;; *) echo no match;; esac"
+    status: 0
+    output: "matches pattern"
+
+  - name: Nested Case Statements
+    command: "a=\"outer\"; b=\"inner\"; case $a in outer) echo outer; case $b in inner) echo inner;; esac;; *) echo no match;; esac"
+    status: 0
+    output: "outer\ninner"
+
+  - name: Special Characters Handling
+    command: "a=\"value?\"; case $a in *\\?) echo special char match;; *) echo no match;; esac"
+    status: 0
+    output: "special char match"
+
+  - name: Case with Variable Pattern
+    command: "a=\"dynamic\"; pattern=\"dy*\"; case $a in $pattern) echo dynamic match;; *) echo no match;; esac"
+    status: 0
+    output: "dynamic match"
+
+  - name: Complex Pattern Matching
+    command: "a=\"start-middle-end\"; case $a in start-*-end) echo complex match;; *) echo no match;; esac"
+    status: 0
+    output: "complex match"
+
+  - name: Match Against Multiple Complex Patterns
+    command: "a=\"prefix-suffix\"; case $a in pre*-suf* | *-suffix) echo complex pattern match;; *) echo no match;; esac"
+    status: 0
+    output: "complex pattern match"

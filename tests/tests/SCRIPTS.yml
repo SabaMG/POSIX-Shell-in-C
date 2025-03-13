@@ -1,0 +1,76 @@
+tests:
+  - name: Funny Escaped
+    script: "funny_escaped.sh"
+    status: 0
+    output: "n ! @ # $ % ^ & * ( ) _ + = [ ] ; ' \" : , < > . ? / \\\ntoto ;\n\" n \\\\ ' 13 ; 14 # Not a comment"
+
+  - name: Many Redirect
+    script: "many_redirections.sh"
+    status: 0
+    output: "12\n12\n3\n2\n3\necho 12\ntoto"
+
+  - name: Tricky Echo
+    script: "tricky_echo.sh"
+    status: 127
+    output: "13\\necho 14"
+
+  - name: Variables fonctionne pas normal car random et pid et uid
+    script: "variables.sh"
+    status: 0
+    output: "12\n13\nscripts/variables.sh scripts/variables.sh 0 scripts/variables.sh 1\n13\n13:13\n$toto\n$toto\n$\n\\;!123/$ value\nrandom\npid\n1000"
+
+  - name: If Quoted Keyword
+    script: "if_quoted_keyword.sh"
+    status: 127
+    output: "12\n14"
+
+  - name: Spaces
+    script: "spaces.sh"
+    status: 0
+    output: "12"
+
+  - name: Echo Escaped
+    script: "echo_escaped.sh"
+    status: 0
+    output: "13nnnecho 14\n\\\\\\\nab \\\\\\\n13\\n14\nn\nn13n14n"
+
+  - name: bad filename
+    script: "bad.sh"
+    status: 2
+    output: ""
+
+  - name: Export Unset
+    script: "export_unset.sh"
+    status: 0
+    output: "13\n13"
+
+  - name: Functions
+    script: "functions.sh"
+    status: 127
+    output: "12\n\n1\n\n\n14"
+
+  - name: IO
+    script: "io_basic_test.sh"
+    status: 0
+    output: "Hello World"
+
+  - name: Dot
+    script: "dot.sh"
+    status: 0
+    output: "12"
+
+  - name: Dot Funny Escaped
+    command: ". scripts/funny_escaped.sh"
+    status: 0
+    output: "n ! @ # $ % ^ & * ( ) _ + = [ ] ; ' \" : , < > . ? / \\\ntoto ;\n\" n \\\\ ' 13 ; 14 # Not a comment"
+
+  - name: Dot Many Redirect
+    command: ". scripts/many_redirections.sh"
+    status: 0
+    output: "12\n12\n3\n2\n3\necho 12\ntoto"
+
+  - name: Dot Tricky Echo
+    command: ". scripts/tricky_echo.sh"
+    status: 127
+    output: "13\\necho 14"
+
